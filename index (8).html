@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гадание на 13 картах</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold: #d4af6a;
+    --gold-bright: #f3d998;
+    --silver: #c9c9d4;
+    --bg-black: #050308;
+    --purple-glow: #3a1657;
+    --purple-deep: #1a0b28;
+    --blood: #8b0000;
+    --card-w: 220px;
+    --card-h: 330px;
+    --mini-w: 110px;
+    --mini-h: 165px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% 40%, var(--purple-glow) 0%, var(--purple-deep) 35%, var(--bg-black) 75%);
+    background-attachment: fixed;
+    color: var(--silver);
+    font-family: 'Cinzel', serif;
+    overflow-x:hidden;
+    transition: background-color 0.4s ease;
+  }
+
+  body.owl-flash{
+    background-color: var(--blood);
+  }
+
+  .stars{
+    position: fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(212,175,106,0.5), transparent),
+      radial-gradient(1px 1px at 80% 30%, rgba(212,175,106,0.4), transparent),
+      radial-gradient(1px 1px at 50% 70%, rgba(212,175,106,0.35), transparent),
+      radial-gradient(1px 1px at 30% 85%, rgba(212,175,106,0.3), transparent),
+      radial-gradient(1px 1px at 65% 15%, rgba(212,175,106,0.4), transparent),
+      radial-gradient(1px 1px at 90% 80%, rgba(212,175,106,0.3), transparent);
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{
+    from{ opacity:0.4; }
+    to{ opacity:1; }
+  }
+
+  /* ===== DISCLAIMER MODAL ===== */
+  .overlay{
+    position: fixed;
+    inset:0;
+    background: rgba(0,0,0,0.9);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.6s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+  .disclaimer-box{
+    max-width: 520px;
+    background: linear-gradient(180deg, #150a1f 0%, #0a0510 100%);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 36px 30px;
+    text-align:center;
+    box-shadow: 0 0 40px rgba(212,175,106,0.25), inset 0 0 30px rgba(90,30,120,0.35);
+  }
+  .disclaimer-box h2{
+    font-family:'Uncial Antiqua', serif;
+    color: var(--gold-bright);
+    font-size: 1.5rem;
+    margin: 0 0 20px;
+    text-shadow: 0 0 12px rgba(243,217,152,0.6);
+  }
+  .disclaimer-box p{
+    line-height: 1.7;
+    font-size: 0.95rem;
+    color: var(--silver);
+    margin: 0 0 28px;
+    white-space: pre-line;
+  }
+  .btn-mystic{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, #2a1338, #150a1f);
+    border: 1px solid var(--gold);
+    color: var(--gold-bright);
+    padding: 14px 30px;
+    border-radius: 3px;
+    cursor:pointer;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(212,175,106,0.25);
+    transition: transform 0.15s ease, box-shadow 0.25s ease;
+  }
+  .btn-mystic:hover{
+    box-shadow: 0 0 25px rgba(212,175,106,0.55);
+  }
+  .btn-mystic:active{
+    transform: scale(0.94);
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .page{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    padding: 40px 16px 80px;
+    text-align:center;
+  }
+
+  h1.site-title{
+    font-family:'Uncial Antiqua', serif;
+    font-size: 2.1rem;
+    color: var(--gold-bright);
+    text-shadow: 0 0 18px rgba(243,217,152,0.55), 0 0 40px rgba(122,60,170,0.5);
+    margin: 10px 0 4px;
+    letter-spacing: 2px;
+  }
+  .subtitle{
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--silver);
+    opacity:0.6;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* ===== MODE SWITCH ===== */
+  .mode-switch{
+    display:flex;
+    gap: 10px;
+    margin-bottom: 40px;
+    background: rgba(20,10,30,0.5);
+    border: 1px solid rgba(212,175,106,0.3);
+    border-radius: 40px;
+    padding: 5px;
+  }
+  .mode-btn{
+    font-family:'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--silver);
+    background: transparent;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .mode-btn.active{
+    color: var(--bg-black);
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    box-shadow: 0 0 18px rgba(243,217,152,0.5);
+  }
+  .mode-btn:not(.active):hover{
+    color: var(--gold-bright);
+  }
+
+  .mode-view{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    width: 100%;
+  }
+  .mode-view.active{
+    display:flex;
+  }
+
+  /* ===== SINGLE CARD STAGE ===== */
+  .stage{
+    position:relative;
+    width: var(--card-w);
+    height: var(--card-h);
+    margin-bottom: 30px;
+    perspective: 1200px;
+  }
+
+  .card-frame{
+    position:relative;
+    width:100%;
+    height:100%;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #1c0f28, #0a0510);
+    border: 2px solid var(--gold);
+    box-shadow:
+      0 0 0 1px rgba(212,175,106,0.25),
+      0 10px 30px rgba(0,0,0,0.7),
+      0 0 25px rgba(122,60,170,0.4);
+    overflow:hidden;
+    transition: box-shadow 0.4s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card-frame::before, .card-frame::after{
+    content:'';
+    position:absolute;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--gold);
+    opacity: 0.85;
+    pointer-events:none;
+  }
+  .card-frame::before{
+    top: 8px; left: 8px;
+    border-right:none; border-bottom:none;
+    border-top-left-radius: 8px;
+  }
+  .card-frame::after{
+    bottom: 8px; right: 8px;
+    border-left:none; border-top:none;
+    border-bottom-right-radius: 8px;
+  }
+
+  .card-frame.glow-hover:hover{
+    box-shadow:
+      0 0 0 1px rgba(212,175,106,0.5),
+      0 10px 30px rgba(0,0,0,0.7),
+      0 0 45px rgba(243,217,152,0.55);
+  }
+
+  .card-inner-img{
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 8px;
+    object-fit: cover;
+    display:block;
+  }
+
+  .card-placeholder{
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap: 10px;
+    background: radial-gradient(circle at 50% 40%, #2a1338, #0a0510 80%);
+    font-size: 4.2rem;
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px rgba(243,217,152,0.5);
+  }
+  .card-placeholder span.label{
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--silver);
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+
+  .card-back-symbol{
+    font-family:'Uncial Antiqua', serif;
+    font-size: 3.2rem;
+    color: var(--gold);
+    opacity: 0.5;
+    text-shadow: 0 0 20px rgba(212,175,106,0.4);
+  }
+
+  /* ---- varied shuffle animation styles, cycled ---- */
+  .stage.shuffle-shake .card-frame{ animation: shuffleShake 0.15s infinite; }
+  @keyframes shuffleShake{
+    0%{ transform: rotate(-2deg) scale(1); }
+    50%{ transform: rotate(2deg) scale(1.015); }
+    100%{ transform: rotate(-2deg) scale(1); }
+  }
+
+  .stage.shuffle-spin .card-frame{ animation: shuffleSpin 0.5s linear infinite; }
+  @keyframes shuffleSpin{
+    0%{ transform: rotateY(0deg) scale(0.96); }
+    50%{ transform: rotateY(180deg) scale(1); }
+    100%{ transform: rotateY(360deg) scale(0.96); }
+  }
+
+  .stage.shuffle-slide .card-frame{ animation: shuffleSlide 0.35s ease-in-out infinite; }
+  @keyframes shuffleSlide{
+    0%{ transform: translateX(-14px) rotate(-4deg); }
+    50%{ transform: translateX(14px) rotate(4deg); }
+    100%{ transform: translateX(-14px) rotate(-4deg); }
+  }
+
+  .stage.shuffle-pulse .card-frame{ animation: shufflePulse 0.4s ease-in-out infinite; }
+  @keyframes shufflePulse{
+    0%{ transform: scale(0.92) rotate(0deg); filter: brightness(0.9); }
+    50%{ transform: scale(1.06) rotate(2deg); filter: brightness(1.25); }
+    100%{ transform: scale(0.92) rotate(0deg); filter: brightness(0.9); }
+  }
+
+  /* ghost trailing cards for a "cascade / one under another" feel */
+  .ghost-card{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #1c0f28, #0a0510);
+    border: 2px solid rgba(212,175,106,0.5);
+    z-index: -1;
+    pointer-events:none;
+    opacity: 0;
+  }
+  .stage.is-shuffling .ghost-card.g1{ animation: ghostFloat1 0.6s ease-in-out infinite; opacity:0.55; }
+  .stage.is-shuffling .ghost-card.g2{ animation: ghostFloat2 0.75s ease-in-out infinite; opacity:0.35; }
+  .stage.is-shuffling .ghost-card.g3{ animation: ghostFloat3 0.9s ease-in-out infinite; opacity:0.2; }
+  @keyframes ghostFloat1{
+    0%,100%{ transform: translate(-16px, 10px) rotate(-6deg); }
+    50%{ transform: translate(16px, -6px) rotate(4deg); }
+  }
+  @keyframes ghostFloat2{
+    0%,100%{ transform: translate(20px, -12px) rotate(7deg); }
+    50%{ transform: translate(-18px, 8px) rotate(-5deg); }
+  }
+  @keyframes ghostFloat3{
+    0%,100%{ transform: translate(-24px, -14px) rotate(-9deg); }
+    50%{ transform: translate(22px, 12px) rotate(6deg); }
+  }
+
+  .bismillah-text{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-family:'Uncial Antiqua', serif;
+    font-size: 1.5rem;
+    color: var(--gold-bright);
+    text-shadow: 0 0 10px var(--gold-bright), 0 0 25px var(--gold);
+    z-index: 5;
+    padding: 10px;
+    animation: flicker 0.4s infinite alternate;
+    pointer-events:none;
+    background: rgba(5,3,8,0.55);
+    border-radius: 14px;
+  }
+  @keyframes flicker{
+    from{ opacity: 0.55; }
+    to{ opacity: 1; }
+  }
+
+  .card-frame.revealing{
+    animation: revealPop 0.55s ease forwards;
+  }
+  @keyframes revealPop{
+    0%{ transform: scale(0.6) rotateY(90deg); opacity:0; }
+    60%{ transform: scale(1.08) rotateY(0deg); opacity:1; }
+    100%{ transform: scale(1) rotateY(0deg); opacity:1; }
+  }
+
+  .card-frame.owl-reveal{
+    animation: owlRupture 0.7s ease forwards;
+    border-color: var(--blood);
+  }
+  @keyframes owlRupture{
+    0%{ transform: scale(0.6) skewX(6deg); opacity:0; filter: blur(4px); }
+    30%{ transform: scale(1.1) skewX(-4deg); opacity:1; filter: blur(1px); }
+    45%{ transform: scale(0.97) skewX(3deg); }
+    60%{ transform: scale(1.04) skewX(-2deg); }
+    100%{ transform: scale(1) skewX(0deg); filter: blur(0); }
+  }
+
+  /* ===== DRAW BUTTON ===== */
+  .draw-btn{
+    font-family:'Cinzel', serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    background:
+      radial-gradient(circle at 50% 30%, #2c1440, #100819 75%);
+    border: 2px solid var(--gold);
+    border-radius: 50px;
+    padding: 16px 42px;
+    cursor:pointer;
+    box-shadow:
+      0 0 0 3px rgba(212,175,106,0.12),
+      0 6px 20px rgba(0,0,0,0.6),
+      0 0 25px rgba(122,60,170,0.5);
+    transition: transform 0.12s ease, box-shadow 0.3s ease;
+    margin-top: 10px;
+  }
+  .draw-btn:hover{
+    box-shadow:
+      0 0 0 3px rgba(212,175,106,0.25),
+      0 6px 20px rgba(0,0,0,0.6),
+      0 0 40px rgba(243,217,152,0.6);
+  }
+  .draw-btn:active{
+    transform: scale(0.93);
+  }
+  .draw-btn:disabled{
+    opacity: 0.5;
+    cursor: default;
+    transform:none;
+  }
+
+  /* ===== SIX-CARD FAN LAYOUT ===== */
+  .fan-wrap{
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    height: 260px;
+    margin-bottom: 20px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .mini-card{
+    position:absolute;
+    width: var(--mini-w);
+    height: var(--mini-h);
+    bottom: 0;
+    border-radius: 10px;
+    background: linear-gradient(160deg, #1c0f28, #0a0510);
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 15px rgba(122,60,170,0.35);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform 0.35s cubic-bezier(.2,.8,.3,1.3), box-shadow 0.35s ease, filter 0.4s ease, opacity 0.4s ease;
+    transform-origin: bottom center;
+  }
+  .mini-card .mini-symbol{
+    font-family:'Uncial Antiqua', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+  .mini-card:hover{
+    box-shadow: 0 8px 26px rgba(0,0,0,0.6), 0 0 30px rgba(243,217,152,0.6);
+    filter: brightness(1.15);
+  }
+  .mini-card.picked{
+    z-index: 20;
+  }
+  .mini-card.faded{
+    opacity: 0;
+    transform: scale(0.7) translateY(30px) !important;
+    pointer-events:none;
+  }
+
+  .mini-card[data-slot="0"]{ transform: translateX(-260px) rotate(-24deg) translateY(28px); }
+  .mini-card[data-slot="1"]{ transform: translateX(-160px) rotate(-15deg) translateY(10px); }
+  .mini-card[data-slot="2"]{ transform: translateX(-60px)  rotate(-6deg)  translateY(0px); }
+  .mini-card[data-slot="3"]{ transform: translateX(40px)   rotate(4deg)   translateY(0px); }
+  .mini-card[data-slot="4"]{ transform: translateX(140px)  rotate(13deg)  translateY(10px); }
+  .mini-card[data-slot="5"]{ transform: translateX(240px)  rotate(22deg)  translateY(28px); }
+
+  .mini-card[data-slot="0"]:hover{ transform: translateX(-260px) rotate(-24deg) translateY(4px) scale(1.06); }
+  .mini-card[data-slot="1"]:hover{ transform: translateX(-160px) rotate(-15deg) translateY(-12px) scale(1.06); }
+  .mini-card[data-slot="2"]:hover{ transform: translateX(-60px)  rotate(-6deg)  translateY(-20px) scale(1.06); }
+  .mini-card[data-slot="3"]:hover{ transform: translateX(40px)   rotate(4deg)   translateY(-20px) scale(1.06); }
+  .mini-card[data-slot="4"]:hover{ transform: translateX(140px)  rotate(13deg)  translateY(-12px) scale(1.06); }
+  .mini-card[data-slot="5"]:hover{ transform: translateX(240px)  rotate(22deg)  translateY(4px) scale(1.06); }
+
+  .mini-card.picked{
+    animation: pickedFlip 0.7s ease forwards;
+  }
+  @keyframes pickedFlip{
+    0%{ transform: scale(1.06) rotateY(0deg) translateY(-20px); }
+    45%{ transform: scale(1.15) rotateY(90deg) translateY(-60px); filter: brightness(1.4); }
+    100%{ transform: scale(1.15) rotateY(0deg) translateY(-60px); }
+  }
+  .mini-card.owl-picked{
+    animation: pickedFlipOwl 0.8s ease forwards;
+    border-color: var(--blood);
+  }
+  @keyframes pickedFlipOwl{
+    0%{ transform: scale(1.06) rotateY(0deg) translateY(-20px) skewX(0deg); }
+    35%{ transform: scale(1.2) rotateY(80deg) translateY(-60px) skewX(6deg); filter: brightness(1.6); }
+    60%{ transform: scale(1.12) rotateY(0deg) translateY(-55px) skewX(-3deg); }
+    100%{ transform: scale(1.15) rotateY(0deg) translateY(-60px) skewX(0deg); }
+  }
+
+  .redo-btn{
+    font-family:'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 10px 22px;
+    cursor:pointer;
+    margin-top: 60px;
+    transition: box-shadow 0.3s ease, transform 0.15s ease;
+  }
+  .redo-btn:hover{ box-shadow: 0 0 18px rgba(243,217,152,0.4); }
+  .redo-btn:active{ transform: scale(0.94); }
+
+  .hint-text{
+    font-size: 0.8rem;
+    color: var(--silver);
+    opacity: 0.55;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  /* ===== RESULT TEXT ===== */
+  .result{
+    margin-top: 28px;
+    max-width: 480px;
+    min-height: 90px;
+  }
+  .result h2{
+    font-family:'Uncial Antiqua', serif;
+    font-size: 1.4rem;
+    color: var(--gold-bright);
+    text-shadow: 0 0 14px rgba(243,217,152,0.5);
+    margin: 0 0 12px;
+    letter-spacing: 1px;
+    opacity:0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  .result p{
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--silver);
+    opacity:0;
+    animation: fadeUp 0.6s ease 0.15s forwards;
+    min-height: 1.7em;
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(10px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .result p.owl-text{
+    color: #ff9d9d;
+    text-shadow: 0 0 10px rgba(255,60,60,0.6);
+    border-left: 2px solid var(--blood);
+    padding-left: 12px;
+    text-align:left;
+  }
+
+  .cursor-blink::after{
+    content:'▍';
+    animation: blink 0.8s steps(1) infinite;
+    color: #ff6b6b;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  footer{
+    margin-top: 60px;
+    font-size: 0.75rem;
+    color: var(--silver);
+    opacity: 0.4;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 480px){
+    :root{
+      --card-w: 180px;
+      --card-h: 270px;
+      --mini-w: 78px;
+      --mini-h: 117px;
+    }
+    h1.site-title{ font-size: 1.6rem; }
+    .draw-btn{ padding: 14px 30px; font-size: 0.85rem; }
+    .fan-wrap{ height: 200px; }
+    .mini-card[data-slot="0"]{ transform: translateX(-140px) rotate(-24deg) translateY(20px); }
+    .mini-card[data-slot="1"]{ transform: translateX(-86px) rotate(-15deg) translateY(8px); }
+    .mini-card[data-slot="2"]{ transform: translateX(-32px)  rotate(-6deg)  translateY(0px); }
+    .mini-card[data-slot="3"]{ transform: translateX(22px)   rotate(4deg)   translateY(0px); }
+    .mini-card[data-slot="4"]{ transform: translateX(76px)  rotate(13deg)  translateY(8px); }
+    .mini-card[data-slot="5"]{ transform: translateX(130px)  rotate(22deg)  translateY(20px); }
+    .mini-card[data-slot="0"]:hover{ transform: translateX(-140px) rotate(-24deg) translateY(0px) scale(1.06); }
+    .mini-card[data-slot="1"]:hover{ transform: translateX(-86px) rotate(-15deg) translateY(-10px) scale(1.06); }
+    .mini-card[data-slot="2"]:hover{ transform: translateX(-32px)  rotate(-6deg)  translateY(-16px) scale(1.06); }
+    .mini-card[data-slot="3"]:hover{ transform: translateX(22px)   rotate(4deg)   translateY(-16px) scale(1.06); }
+    .mini-card[data-slot="4"]:hover{ transform: translateX(76px)  rotate(13deg)  translateY(-10px) scale(1.06); }
+    .mini-card[data-slot="5"]:hover{ transform: translateX(130px)  rotate(22deg)  translateY(0px) scale(1.06); }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<!-- ===== DISCLAIMER MODAL ===== -->
+<div class="overlay" id="disclaimerOverlay">
+  <div class="disclaimer-box">
+    <h2>⚠️ ВНИМАНИЕ ⚠️</h2>
+    <p>Все предсказания на этом сайте — это вымысел и развлечение.
+Любые совпадения с реальностью случайны.
+Не воспринимайте всерьёз то, что вы увидите.
+Наслаждайтесь атмосферой и помните: ваша судьба — в ваших руках!</p>
+    <button class="btn-mystic" id="acceptBtn">Я понимаю, показать карты</button>
+  </div>
+</div>
+
+<div class="page">
+  <h1 class="site-title">Гадание на 13 картах</h1>
+  <div class="subtitle">спроси у судьбы</div>
+
+  <div class="mode-switch">
+    <button class="mode-btn active" id="modeSingleBtn">Одна карта</button>
+    <button class="mode-btn" id="modeFanBtn">Выбери из 6</button>
+  </div>
+
+  <!-- ===== MODE 1: single card draw ===== -->
+  <div class="mode-view active" id="modeSingle">
+    <div class="stage" id="stage">
+      <div class="ghost-card g1"></div>
+      <div class="ghost-card g2"></div>
+      <div class="ghost-card g3"></div>
+      <div class="card-frame glow-hover" id="cardFrame">
+        <div class="bismillah-text" id="bismillahText">БИСМИЛЛЯХ</div>
+        <div class="card-placeholder" id="cardContent">
+          <div class="card-back-symbol">☾ ✦ ☽</div>
+          <span class="label">карта скрыта</span>
+        </div>
+      </div>
+    </div>
+    <button class="draw-btn" id="drawBtn">Вытянуть карту</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- ===== MODE 2: pick one of 6 ===== -->
+  <div class="mode-view" id="modeFan">
+    <div class="hint-text" id="fanHint">Выбери одну из шести карт</div>
+    <div class="fan-wrap" id="fanWrap"></div>
+    <button class="redo-btn" id="redoBtn">Разложить заново</button>
+    <div class="result" id="resultFan"></div>
+  </div>
+
+</div>
+
+<footer>сделано для развлечения · GitHub Pages</footer>
+
+<script>
+  const cards = [
+    { id: 1,  name: "ЛЕМУР",   text: "Всё будет хорошо", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Limur.png", icon: "🐒" },
+    { id: 2,  name: "ЖИРАФ",   text: "Все ваши дети сдохнут в течение года от цирроза, гепатита 4, переедет трамвай", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Jiraf.png", icon: "🦒" },
+    { id: 3,  name: "СОБАКА",  text: "Денег у вас никогда не будет, жизнь в нищете, смерть под мостом", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Dog.png", icon: "🐕" },
+    { id: 4,  name: "ПИНГВИН", text: "К вашей маме прилетит Фламинго и оторвёт ей 2 ноги", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Penguin.png", icon: "🐧" },
+    { id: 5,  name: "ЕНОТ",    text: "НЕ ТАКАЯ СТРАШНАЯ КАРТА, НО ЗАВТРА ПЕРЕЕДЕТ ТРАМВАЙ", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Boryk.png", icon: "🦝" },
+    { id: 6,  name: "ПТИЦА",   text: "Вас пустят индусы по кругу в Болгарии", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Bird.png", icon: "🐦" },
+    { id: 7,  name: "БЕЛКА",   text: "У вас завтра отнимутся ноги, в течение года умрёте от рака", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Belka.png", icon: "🐿️" },
+    { id: 8,  name: "ДЕЛЬФИН", text: "У вас завтра мама умрёт", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/dolfin.png", icon: "🐬" },
+    { id: 9,  name: "КОНЬ",    text: "Завтра вам трамвай переедет руку и ногу", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/horse.png", icon: "🐴" },
+    { id: 10, name: "ТИГР",    text: "Ваша мама умрёт, а у вас от горя ноги отнимутся", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/tiger.png", icon: "🐯" },
+    { id: 11, name: "МЕДВЕДЬ", text: "Твоей маме полгода осталось", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/bear.png", icon: "🐻" },
+    { id: 12, name: "БАЛЕРША (СВИНЬЯ)", text: "Смерть вашей матери понезавтра", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/pig.png", icon: "🐷" },
+    { id: 13, name: "СОВА",    text: "Вся родня умрёт от гепатита С. Ваша мама будет мучаться в вагоне и умрёт. Смерть всей вашей семьи от бомбардировки неизбежна", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/SOVA.png", icon: "🦉" }
+  ];
+
+  // ---- disclaimer ----
+  const overlay = document.getElementById('disclaimerOverlay');
+  document.getElementById('acceptBtn').addEventListener('click', () => {
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.4s ease';
+    setTimeout(() => overlay.remove(), 400);
+  });
+
+  // ---- mode switching ----
+  const modeSingleBtn = document.getElementById('modeSingleBtn');
+  const modeFanBtn = document.getElementById('modeFanBtn');
+  const modeSingle = document.getElementById('modeSingle');
+  const modeFan = document.getElementById('modeFan');
+
+  modeSingleBtn.addEventListener('click', () => {
+    modeSingleBtn.classList.add('active');
+    modeFanBtn.classList.remove('active');
+    modeSingle.classList.add('active');
+    modeFan.classList.remove('active');
+  });
+  modeFanBtn.addEventListener('click', () => {
+    modeFanBtn.classList.add('active');
+    modeSingleBtn.classList.remove('active');
+    modeFan.classList.add('active');
+    modeSingle.classList.remove('active');
+    if(!fanBuilt) buildFan();
+  });
+
+  // ===================================================
+  // MODE 1: single draw with varied shuffle animation
+  // ===================================================
+  const stage = document.getElementById('stage');
+  const cardFrame = document.getElementById('cardFrame');
+  const cardContent = document.getElementById('cardContent');
+  const bismillahText = document.getElementById('bismillahText');
+  const drawBtn = document.getElementById('drawBtn');
+  const resultBox = document.getElementById('result');
+
+  const shuffleStyles = ['shuffle-shake', 'shuffle-spin', 'shuffle-slide', 'shuffle-pulse'];
+  let shuffleInterval = null;
+  let styleInterval = null;
+  let isDrawing = false;
+
+  function renderCardVisual(container, card){
+    container.innerHTML = '';
+    const img = new Image();
+    img.className = 'card-inner-img';
+    img.alt = card.name;
+    img.onerror = () => {
+      container.innerHTML = `
+        <div class="card-placeholder">
+          <div style="font-size:4.2rem;">${card.icon}</div>
+          <span class="label">${card.name}</span>
+        </div>`;
+    };
+    img.onload = () => {
+      container.innerHTML = '';
+      container.appendChild(img);
+    };
+    img.src = card.image;
+  }
+
+  function typeWriter(el, text, speed = 26){
+    el.textContent = '';
+    el.classList.add('cursor-blink');
+    let i = 0;
+    return new Promise(resolve => {
+      const timer = setInterval(() => {
+        el.textContent += text.charAt(i);
+        i++;
+        if(i >= text.length){
+          clearInterval(timer);
+          el.classList.remove('cursor-blink');
+          resolve();
+        }
+      }, speed);
+    });
+  }
+
+  function revealInto(card, contentEl, frameEl, targetResultBox){
+    const isOwl = card.id === 13;
+    renderCardVisual(contentEl, card);
+
+    frameEl.classList.remove('revealing', 'owl-reveal');
+    void frameEl.offsetWidth; // restart animation
+    if(isOwl){
+      document.body.classList.add('owl-flash');
+      setTimeout(() => document.body.classList.remove('owl-flash'), 500);
+      frameEl.classList.add('owl-reveal');
+    } else {
+      frameEl.classList.add('revealing');
+    }
+
+    targetResultBox.innerHTML = '';
+    const h2 = document.createElement('h2');
+    h2.textContent = card.name;
+    targetResultBox.appendChild(h2);
+
+    const p = document.createElement('p');
+    if(isOwl) p.classList.add('owl-text');
+    targetResultBox.appendChild(p);
+
+    if(isOwl){
+      return typeWriter(p, card.text, 26);
+    } else {
+      p.textContent = card.text;
+      return Promise.resolve();
+    }
+  }
+
+  drawBtn.addEventListener('click', () => {
+    if(isDrawing) return;
+    isDrawing = true;
+    drawBtn.disabled = true;
+    resultBox.innerHTML = '';
+    cardFrame.classList.remove('revealing', 'owl-reveal');
+
+    cardContent.innerHTML = `
+      <div class="card-back-symbol">☾ ✦ ☽</div>
+      <span class="label" style="display:block;margin-top:8px;">тасуется...</span>`;
+
+    bismillahText.style.display = 'flex';
+    stage.classList.add('is-shuffling');
+
+    let styleIdx = 0;
+    stage.classList.add(shuffleStyles[styleIdx]);
+
+    // cycle through different shuffle animation styles every ~500ms
+    styleInterval = setInterval(() => {
+      stage.classList.remove(shuffleStyles[styleIdx]);
+      styleIdx = (styleIdx + 1) % shuffleStyles.length;
+      stage.classList.add(shuffleStyles[styleIdx]);
+    }, 500);
+
+    // flicker through random icons during shuffle
+    shuffleInterval = setInterval(() => {
+      const random = cards[Math.floor(Math.random() * cards.length)];
+      cardContent.innerHTML = `<div style="font-size:4.2rem; opacity:0.5;">${random.icon}</div>`;
+    }, 70);
+
+    setTimeout(() => {
+      clearInterval(shuffleInterval);
+      clearInterval(styleInterval);
+      shuffleStyles.forEach(s => stage.classList.remove(s));
+      stage.classList.remove('is-shuffling');
+      bismillahText.style.display = 'none';
+
+      const chosen = cards[Math.floor(Math.random() * cards.length)];
+      revealInto(chosen, cardContent, cardFrame, resultBox).then(() => {
+        isDrawing = false;
+        drawBtn.disabled = false;
+      });
+    }, 3000);
+  });
+
+  // ===================================================
+  // MODE 2: fan of 6 face-down cards, pick one
+  // ===================================================
+  const fanWrap = document.getElementById('fanWrap');
+  const resultFan = document.getElementById('resultFan');
+  const fanHint = document.getElementById('fanHint');
+  const redoBtn = document.getElementById('redoBtn');
+  let fanBuilt = false;
+  let fanLocked = false;
+
+  function buildFan(){
+    fanWrap.innerHTML = '';
+    resultFan.innerHTML = '';
+    fanHint.style.display = 'block';
+    fanHint.textContent = 'Выбери одну из шести карт';
+    fanLocked = false;
+
+    for(let i = 0; i < 6; i++){
+      const mini = document.createElement('div');
+      mini.className = 'mini-card';
+      mini.dataset.slot = i;
+      mini.innerHTML = '<div class="mini-symbol">☾✦☽</div>';
+      mini.addEventListener('click', () => onMiniPick(mini, i));
+      fanWrap.appendChild(mini);
+    }
+    fanBuilt = true;
+  }
+
+  function onMiniPick(mini, slot){
+    if(fanLocked) return;
+    fanLocked = true;
+    fanHint.style.display = 'none';
+
+    // fade out the other 5 cards
+    document.querySelectorAll('.mini-card').forEach(el => {
+      if(el !== mini) el.classList.add('faded');
+    });
+
+    const chosen = cards[Math.floor(Math.random() * cards.length)];
+    const isOwl = chosen.id === 13;
+
+    mini.classList.add('picked');
+    if(isOwl) mini.classList.add('owl-picked');
+
+    setTimeout(() => {
+      mini.innerHTML = '';
+      renderCardVisual(mini, chosen);
+
+      if(isOwl){
+        document.body.classList.add('owl-flash');
+        setTimeout(() => document.body.classList.remove('owl-flash'), 500);
+      }
+
+      resultFan.innerHTML = '';
+      const h2 = document.createElement('h2');
+      h2.textContent = chosen.name;
+      resultFan.appendChild(h2);
+      const p = document.createElement('p');
+      if(isOwl) p.classList.add('owl-text');
+      resultFan.appendChild(p);
+
+      if(isOwl){
+        typeWriter(p, chosen.text, 26);
+      } else {
+        p.textContent = chosen.text;
+      }
+    }, 350);
+  }
+
+  redoBtn.addEventListener('click', buildFan);
+</script>
+
+</body>
+</html>
