@@ -11,15 +11,16 @@
   :root{
     --gold: #d4af6a;
     --gold-bright: #f3d998;
-    --silver: #c9c9d4;
-    --bg-black: #050308;
-    --purple-glow: #3a1657;
-    --purple-deep: #1a0b28;
-    --blood: #8b0000;
+    --silver: #ababb2;
+    --bg-black: #000000;
+    --purple-glow: #1c0000;
+    --purple-deep: #0a0a0a;
+    --blood: #b30000;
     --card-w: 220px;
     --card-h: 330px;
     --mini-w: 110px;
     --mini-h: 165px;
+    --blood-bright: #ff2b2b;
   }
 
   *{ box-sizing: border-box; }
@@ -81,7 +82,7 @@
     border-radius: 6px;
     padding: 36px 30px;
     text-align:center;
-    box-shadow: 0 0 40px rgba(212,175,106,0.25), inset 0 0 30px rgba(90,30,120,0.35);
+    box-shadow: 0 0 40px rgba(212,175,106,0.25), inset 0 0 30px rgba(80,0,0,0.35);
   }
   .disclaimer-box h2{
     font-family:'Uncial Antiqua', serif;
@@ -135,7 +136,7 @@
     font-family:'Uncial Antiqua', serif;
     font-size: 2.1rem;
     color: var(--gold-bright);
-    text-shadow: 0 0 18px rgba(243,217,152,0.55), 0 0 40px rgba(122,60,170,0.5);
+    text-shadow: 0 0 18px rgba(243,217,152,0.55), 0 0 40px rgba(150,0,0,0.5);
     margin: 10px 0 4px;
     letter-spacing: 2px;
   }
@@ -210,7 +211,7 @@
     box-shadow:
       0 0 0 1px rgba(212,175,106,0.25),
       0 10px 30px rgba(0,0,0,0.7),
-      0 0 25px rgba(122,60,170,0.4);
+      0 0 25px rgba(150,0,0,0.4);
     overflow:hidden;
     transition: box-shadow 0.4s ease;
     display:flex;
@@ -401,7 +402,7 @@
     box-shadow:
       0 0 0 3px rgba(212,175,106,0.12),
       0 6px 20px rgba(0,0,0,0.6),
-      0 0 25px rgba(122,60,170,0.5);
+      0 0 25px rgba(150,0,0,0.5);
     transition: transform 0.12s ease, box-shadow 0.3s ease;
     margin-top: 10px;
   }
@@ -439,7 +440,7 @@
     border-radius: 10px;
     background: linear-gradient(160deg, #1c0f28, #0a0510);
     border: 2px solid var(--gold);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 15px rgba(122,60,170,0.35);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6), 0 0 15px rgba(150,0,0,0.35);
     cursor:pointer;
     display:flex;
     align-items:center;
@@ -568,8 +569,180 @@
   }
   @keyframes blink{ 50%{ opacity:0; } }
 
+  /* ===== SEVERITY / RED "CURSE" TEXT ===== */
+  .result p.curse-text{
+    color: var(--blood-bright);
+    text-shadow: 0 0 10px rgba(255,43,43,0.65), 0 0 22px rgba(179,0,0,0.4);
+    border-left: 2px solid var(--blood);
+    padding-left: 12px;
+    text-align:left;
+    font-weight: 600;
+  }
+  .result h2.curse-title{
+    color: var(--blood-bright);
+    text-shadow: 0 0 14px rgba(255,43,43,0.7);
+  }
+
+  /* ===== WHEEL OF FORTUNE ===== */
+  .wheel-stage{
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 10px 0 30px;
+  }
+  .wheel-pointer{
+    position:absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height:0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 26px solid var(--blood-bright);
+    filter: drop-shadow(0 0 8px rgba(255,43,43,0.8));
+    z-index: 10;
+  }
+  .wheel{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.9), 0 0 40px rgba(179,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.8);
+    transition: transform 4.5s cubic-bezier(.13,.85,.13,1);
+    transform: rotate(0deg);
+    position: relative;
+  }
+  .wheel-hub{
+    position:absolute;
+    top:50%; left:50%;
+    width: 46px; height:46px;
+    border-radius:50%;
+    background: radial-gradient(circle at 40% 35%, var(--gold-bright), var(--gold) 70%, #3a2a10 100%);
+    border: 2px solid #000;
+    transform: translate(-50%,-50%);
+    box-shadow: 0 0 15px rgba(243,217,152,0.6);
+    z-index: 5;
+  }
+  .spin-btn{ margin-top: 6px; }
+
+  /* ===== THREE-CARD SPREAD ===== */
+  .spread-wrap{
+    display:flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content:center;
+    margin-bottom: 24px;
+  }
+  .spread-slot{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 10px;
+  }
+  .spread-slot .slot-label{
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.75;
+  }
+  .spread-card{
+    width: 130px;
+    height: 195px;
+    border-radius: 10px;
+    background: linear-gradient(160deg, #120a18, #000);
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 15px rgba(179,0,0,0.3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .spread-card img{ width: calc(100% - 14px); height: calc(100% - 14px); object-fit: cover; border-radius:6px; }
+  .spread-slot .spread-name{
+    font-family:'Uncial Antiqua', serif;
+    font-size: 0.85rem;
+    color: var(--gold-bright);
+    text-align:center;
+  }
+  .spread-slot .spread-text{
+    font-size: 0.78rem;
+    line-height:1.5;
+    max-width: 150px;
+    text-align:center;
+    color: var(--silver);
+  }
+  .spread-slot .spread-text.curse-text{
+    color: var(--blood-bright);
+    border:none;
+    padding:0;
+  }
+
+  /* ===== AUTHOR / SUPPORT BLOCK ===== */
+  .author-block{
+    margin-top: 70px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(212,175,106,0.2);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 16px;
+  }
+  .author-row{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--silver);
+    letter-spacing: 0.5px;
+  }
+  .author-row b{
+    color: var(--gold-bright);
+    font-family:'Cinzel', serif;
+    letter-spacing: 1px;
+  }
+  .discord-link{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    text-decoration:none;
+    color: var(--silver);
+    border: 1px solid rgba(212,175,106,0.35);
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    transition: box-shadow 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+  .discord-link:hover{
+    color: var(--gold-bright);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(212,175,106,0.35);
+  }
+  .discord-link svg{ width:18px; height:18px; fill: #5865F2; flex-shrink:0; }
+
+  .support-btn{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    letter-spacing: 1px;
+    text-decoration:none;
+    color: #fff;
+    background: linear-gradient(180deg, var(--blood-bright), var(--blood) 80%);
+    padding: 12px 26px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    text-transform:uppercase;
+    box-shadow: 0 0 20px rgba(255,43,43,0.4);
+    transition: transform 0.15s ease, box-shadow 0.25s ease;
+  }
+  .support-btn:hover{ box-shadow: 0 0 32px rgba(255,43,43,0.65); }
+  .support-btn:active{ transform: scale(0.95); }
+
   footer{
-    margin-top: 60px;
+    margin-top: 40px;
     font-size: 0.75rem;
     color: var(--silver);
     opacity: 0.4;
@@ -624,6 +797,8 @@
   <div class="mode-switch">
     <button class="mode-btn active" id="modeSingleBtn">Одна карта</button>
     <button class="mode-btn" id="modeFanBtn">Выбери из 6</button>
+    <button class="mode-btn" id="modeWheelBtn">Колесо судьбы</button>
+    <button class="mode-btn" id="modeSpreadBtn">Три карты</button>
   </div>
 
   <!-- ===== MODE 1: single card draw ===== -->
@@ -652,25 +827,70 @@
     <div class="result" id="resultFan"></div>
   </div>
 
+  <!-- ===== MODE 3: wheel of fortune ===== -->
+  <div class="mode-view" id="modeWheel">
+    <div class="hint-text" id="wheelHint">Крути колесо и узнай свою судьбу</div>
+    <div class="wheel-stage">
+      <div class="wheel-pointer"></div>
+      <svg class="wheel" id="wheel" viewBox="0 0 300 300"></svg>
+      <div class="wheel-hub"></div>
+    </div>
+    <button class="draw-btn spin-btn" id="spinBtn">Крутить колесо</button>
+    <div class="result" id="resultWheel"></div>
+  </div>
+
+  <!-- ===== MODE 4: three-card spread (past/present/future) ===== -->
+  <div class="mode-view" id="modeSpread">
+    <div class="hint-text" id="spreadHint">Прошлое · Настоящее · Будущее</div>
+    <div class="spread-wrap" id="spreadWrap"></div>
+    <button class="draw-btn" id="spreadBtn">Разложить карты</button>
+  </div>
+
 </div>
 
-<footer>сделано для развлечения · GitHub Pages</footer>
+<div class="author-block">
+  <div class="author-row">Создатель сайта — <b>haaatching</b></div>
+  <a class="discord-link" href="https://discord.gg/haaatching" target="_blank" rel="noopener">
+    <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+    Discord-сервер
+  </a>
+  <a class="support-btn" href="https://boosty.to/haaatching" target="_blank" rel="noopener">
+    🩸 Поддержать автора
+  </a>
+</div>
+
+<footer>сделано для развлечения · не воспринимайте всерьёз</footer>
 
 <script>
   const cards = [
-    { id: 1,  name: "ЛЕМУР",   text: "Всё будет хорошо", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Limur.png", icon: "🐒" },
-    { id: 2,  name: "ЖИРАФ",   text: "Все ваши дети сдохнут в течение года от цирроза, гепатита 4, переедет трамвай", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Jiraf.png", icon: "🦒" },
-    { id: 3,  name: "СОБАКА",  text: "Денег у вас никогда не будет, жизнь в нищете, смерть под мостом", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Dog.png", icon: "🐕" },
-    { id: 4,  name: "ПИНГВИН", text: "К вашей маме прилетит Фламинго и оторвёт ей 2 ноги", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Penguin.png", icon: "🐧" },
-    { id: 5,  name: "ЕНОТ",    text: "НЕ ТАКАЯ СТРАШНАЯ КАРТА, НО ЗАВТРА ПЕРЕЕДЕТ ТРАМВАЙ", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Boryk.png", icon: "🦝" },
-    { id: 6,  name: "ПТИЦА",   text: "Вас пустят индусы по кругу в Болгарии", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Bird.png", icon: "🐦" },
-    { id: 7,  name: "БЕЛКА",   text: "У вас завтра отнимутся ноги, в течение года умрёте от рака", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Belka.png", icon: "🐿️" },
-    { id: 8,  name: "ДЕЛЬФИН", text: "У вас завтра мама умрёт", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/dolfin.png", icon: "🐬" },
-    { id: 9,  name: "КОНЬ",    text: "Завтра вам трамвай переедет руку и ногу", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/horse.png", icon: "🐴" },
-    { id: 10, name: "ТИГР",    text: "Ваша мама умрёт, а у вас от горя ноги отнимутся", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/tiger.png", icon: "🐯" },
-    { id: 11, name: "МЕДВЕДЬ", text: "Твоей маме полгода осталось", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/bear.png", icon: "🐻" },
-    { id: 12, name: "БАЛЕРША (СВИНЬЯ)", text: "Смерть вашей матери понезавтра", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/pig.png", icon: "🐷" },
-    { id: 13, name: "СОВА",    text: "Вся родня умрёт от гепатита С. Ваша мама будет мучаться в вагоне и умрёт. Смерть всей вашей семьи от бомбардировки неизбежна", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/SOVA.png", icon: "🦉" }
+    { id: 1,  name: "ЛЕМУР",   text: "Всё будет хорошо", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Limur.png", icon: "🐒", severity: "light" },
+    { id: 2,  name: "ЖИРАФ",   text: "Все ваши дети сдохнут в течение года от цирроза, гепатита 4, переедет трамвай", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Jiraf.png", icon: "🦒", severity: "harsh" },
+    { id: 3,  name: "СОБАКА",  text: "Денег у вас никогда не будет, жизнь в нищете, смерть под мостом", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Dog.png", icon: "🐕", severity: "harsh" },
+    { id: 4,  name: "ПИНГВИН", text: "К вашей маме прилетит Фламинго и оторвёт ей 2 ноги", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Penguin.png", icon: "🐧", severity: "harsh" },
+    { id: 5,  name: "ЕНОТ",    text: "НЕ ТАКАЯ СТРАШНАЯ КАРТА, НО ЗАВТРА ПЕРЕЕДЕТ ТРАМВАЙ", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Boryk.png", icon: "🦝", severity: "harsh" },
+    { id: 6,  name: "ПТИЦА",   text: "Вас пустят индусы по кругу в Болгарии", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Bird.png", icon: "🐦", severity: "harsh" },
+    { id: 7,  name: "БЕЛКА",   text: "У вас завтра отнимутся ноги, в течение года умрёте от рака", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Belka.png", icon: "🐿️", severity: "cursed" },
+    { id: 8,  name: "ДЕЛЬФИН", text: "У вас завтра мама умрёт", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/dolfin.png", icon: "🐬", severity: "cursed" },
+    { id: 9,  name: "КОНЬ",    text: "Завтра вам трамвай переедет руку и ногу", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/horse.png", icon: "🐴", severity: "harsh" },
+    { id: 10, name: "ТИГР",    text: "Ваша мама умрёт, а у вас от горя ноги отнимутся", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/tiger.png", icon: "🐯", severity: "cursed" },
+    { id: 11, name: "МЕДВЕДЬ", text: "Твоей маме полгода осталось", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/bear.png", icon: "🐻", severity: "cursed" },
+    { id: 12, name: "БАЛЕРША (СВИНЬЯ)", text: "Смерть вашей матери понезавтра", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/pig.png", icon: "🐷", severity: "cursed" },
+    { id: 13, name: "СОВА",    text: "Вся родня умрёт от гепатита С. Ваша мама будет мучаться в вагоне и умрёт. Смерть всей вашей семьи от бомбардировки неизбежна", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/SOVA.png", icon: "🦉", severity: "cursed" },
+    { id: 14, name: "ВОРОН",   text: "Ты умрёшь в одиночестве. Твоё тело найдут через неделю, когда соседи начнут жаловаться на запах. Вороны выклюют тебе глаза ещё до того, как ты перестанешь дышать", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Raven.png", icon: "🐦‍⬛", severity: "cursed" },
+    { id: 15, name: "ЗМЕЯ",    text: "Тебе повезло, ядовитая змея укусит тебя и тебе ампутируют руку", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Snake.png", icon: "🐍", severity: "light" },
+    { id: 16, name: "ПАУК",    text: "Твоё тело начнёт стареть в два раза быстрее. Каждое утро ты будешь находить новую морщину, каждый день — седой волос. Через год ты не узнаешь себя в зеркале. Ты умрёшь молодым, но старым внутри", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Spider.png", icon: "🕷️", severity: "harsh" },
+    { id: 17, name: "ЛЕТУЧАЯ МЫШЬ", text: "Все будет хорошо", image: "https://raw.githubusercontent.com/legacylauncher111/gadanie/main/Bat.png", icon: "🦇", severity: "light" }
+  ];
+
+  const wheelFates = [
+    { text: "Полная нищета и позор до конца твоих дней", severity: "cursed" },
+    { text: "Внезапное богатство, свалившееся не пойми откуда", severity: "light" },
+    { text: "Тебя предаст тот, кому ты доверяешь больше всего", severity: "harsh" },
+    { text: "Одиночество будет твоим единственным спутником", severity: "cursed" },
+    { text: "Судьба улыбнётся тебе — но только один раз", severity: "light" },
+    { text: "Все твои тайны станут известны всем вокруг", severity: "harsh" },
+    { text: "Твоя удача закончилась ровно в этот момент", severity: "cursed" },
+    { text: "Неожиданная встреча изменит всю твою жизнь", severity: "light" }
   ];
 
   // ---- disclaimer ----
@@ -681,25 +901,11 @@
     setTimeout(() => overlay.remove(), 400);
   });
 
-  // ---- mode switching ----
+  // ---- mode elements (switching logic wired up later, after all modes are defined) ----
   const modeSingleBtn = document.getElementById('modeSingleBtn');
   const modeFanBtn = document.getElementById('modeFanBtn');
   const modeSingle = document.getElementById('modeSingle');
   const modeFan = document.getElementById('modeFan');
-
-  modeSingleBtn.addEventListener('click', () => {
-    modeSingleBtn.classList.add('active');
-    modeFanBtn.classList.remove('active');
-    modeSingle.classList.add('active');
-    modeFan.classList.remove('active');
-  });
-  modeFanBtn.addEventListener('click', () => {
-    modeFanBtn.classList.add('active');
-    modeSingleBtn.classList.remove('active');
-    modeFan.classList.add('active');
-    modeSingle.classList.remove('active');
-    if(!fanBuilt) buildFan();
-  });
 
   // ===================================================
   // MODE 1: single draw with varied shuffle animation
@@ -754,11 +960,13 @@
 
   function revealInto(card, contentEl, frameEl, targetResultBox){
     const isOwl = card.id === 13;
+    const isCursed = card.severity === 'cursed' || isOwl;
+    const isHarsh = card.severity === 'harsh';
     renderCardVisual(contentEl, card);
 
     frameEl.classList.remove('revealing', 'owl-reveal');
     void frameEl.offsetWidth; // restart animation
-    if(isOwl){
+    if(isCursed){
       document.body.classList.add('owl-flash');
       setTimeout(() => document.body.classList.remove('owl-flash'), 500);
       frameEl.classList.add('owl-reveal');
@@ -769,13 +977,14 @@
     targetResultBox.innerHTML = '';
     const h2 = document.createElement('h2');
     h2.textContent = card.name;
+    if(isCursed) h2.classList.add('curse-title');
     targetResultBox.appendChild(h2);
 
     const p = document.createElement('p');
-    if(isOwl) p.classList.add('owl-text');
+    if(isCursed || isHarsh) p.classList.add('curse-text');
     targetResultBox.appendChild(p);
 
-    if(isOwl){
+    if(isCursed){
       return typeWriter(p, card.text, 26);
     } else {
       p.textContent = card.text;
@@ -868,15 +1077,17 @@
 
     const chosen = cards[Math.floor(Math.random() * cards.length)];
     const isOwl = chosen.id === 13;
+    const isCursed = chosen.severity === 'cursed' || isOwl;
+    const isHarsh = chosen.severity === 'harsh';
 
     mini.classList.add('picked');
-    if(isOwl) mini.classList.add('owl-picked');
+    if(isCursed) mini.classList.add('owl-picked');
 
     setTimeout(() => {
       mini.innerHTML = '';
       renderCardVisual(mini, chosen);
 
-      if(isOwl){
+      if(isCursed){
         document.body.classList.add('owl-flash');
         setTimeout(() => document.body.classList.remove('owl-flash'), 500);
       }
@@ -884,12 +1095,13 @@
       resultFan.innerHTML = '';
       const h2 = document.createElement('h2');
       h2.textContent = chosen.name;
+      if(isCursed) h2.classList.add('curse-title');
       resultFan.appendChild(h2);
       const p = document.createElement('p');
-      if(isOwl) p.classList.add('owl-text');
+      if(isCursed || isHarsh) p.classList.add('curse-text');
       resultFan.appendChild(p);
 
-      if(isOwl){
+      if(isCursed){
         typeWriter(p, chosen.text, 26);
       } else {
         p.textContent = chosen.text;
@@ -898,6 +1110,190 @@
   }
 
   redoBtn.addEventListener('click', buildFan);
+
+  // ===================================================
+  // MODE SWITCHING: wire up wheel + spread tabs
+  // ===================================================
+  const modeWheelBtn = document.getElementById('modeWheelBtn');
+  const modeSpreadBtn = document.getElementById('modeSpreadBtn');
+  const modeWheel = document.getElementById('modeWheel');
+  const modeSpread = document.getElementById('modeSpread');
+  const allModeBtns = [modeSingleBtn, modeFanBtn, modeWheelBtn, modeSpreadBtn];
+  const allModeViews = [modeSingle, modeFan, modeWheel, modeSpread];
+
+  function activateMode(btn, view){
+    allModeBtns.forEach(b => b.classList.remove('active'));
+    allModeViews.forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    view.classList.add('active');
+  }
+
+  modeSingleBtn.addEventListener('click', () => activateMode(modeSingleBtn, modeSingle));
+  modeFanBtn.addEventListener('click', () => {
+    activateMode(modeFanBtn, modeFan);
+    if(!fanBuilt) buildFan();
+  });
+  modeWheelBtn.addEventListener('click', () => {
+    activateMode(modeWheelBtn, modeWheel);
+    if(!wheelBuilt) buildWheel();
+  });
+  modeSpreadBtn.addEventListener('click', () => activateMode(modeSpreadBtn, modeSpread));
+
+  // ===================================================
+  // MODE 3: wheel of fortune
+  // ===================================================
+  const wheelSvg = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spinBtn');
+  const resultWheel = document.getElementById('resultWheel');
+  const wheelHint = document.getElementById('wheelHint');
+  let wheelBuilt = false;
+  let wheelRotation = 0;
+  let isSpinning = false;
+
+  function buildWheel(){
+    const n = wheelFates.length;
+    const cx = 150, cy = 150, r = 148;
+    const segAngle = 360 / n;
+    let svgContent = '';
+    const segColors = ['#0a0a0a', '#1c0000'];
+    for(let i = 0; i < n; i++){
+      const startAngle = i * segAngle - 90;
+      const endAngle = startAngle + segAngle;
+      const x1 = cx + r * Math.cos(startAngle * Math.PI / 180);
+      const y1 = cy + r * Math.sin(startAngle * Math.PI / 180);
+      const x2 = cx + r * Math.cos(endAngle * Math.PI / 180);
+      const y2 = cy + r * Math.sin(endAngle * Math.PI / 180);
+      const largeArc = segAngle > 180 ? 1 : 0;
+      const fill = segColors[i % segColors.length];
+      svgContent += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2} Z" fill="${fill}" stroke="#d4af6a" stroke-width="1.5" opacity="0.95"/>`;
+
+      const midAngle = startAngle + segAngle / 2;
+      const labelR = r * 0.62;
+      const lx = cx + labelR * Math.cos(midAngle * Math.PI / 180);
+      const ly = cy + labelR * Math.sin(midAngle * Math.PI / 180);
+      const short = i % 2 === 0 ? '☠' : '✦';
+      svgContent += `<text x="${lx}" y="${ly}" fill="#f3d998" font-size="18" text-anchor="middle" dominant-baseline="middle" transform="rotate(${midAngle + 90},${lx},${ly})">${short}</text>`;
+    }
+    wheelSvg.innerHTML = svgContent;
+    wheelBuilt = true;
+  }
+
+  spinBtn.addEventListener('click', () => {
+    if(isSpinning) return;
+    isSpinning = true;
+    spinBtn.disabled = true;
+    resultWheel.innerHTML = '';
+    wheelHint.style.display = 'block';
+    wheelHint.textContent = 'Колесо решает твою судьбу...';
+
+    const n = wheelFates.length;
+    const segAngle = 360 / n;
+    const targetIndex = Math.floor(Math.random() * n);
+    // land so that the chosen segment's center sits at the top pointer
+    const targetCenterAngle = targetIndex * segAngle + segAngle / 2;
+    const fullSpins = 5 + Math.floor(Math.random() * 3);
+    const finalAngle = fullSpins * 360 + (360 - targetCenterAngle);
+    wheelRotation += finalAngle;
+    wheelSvg.style.transform = `rotate(${wheelRotation}deg)`;
+
+    setTimeout(() => {
+      wheelHint.style.display = 'none';
+      const fate = wheelFates[targetIndex];
+      const isCursed = fate.severity === 'cursed';
+      const isHarsh = fate.severity === 'harsh';
+
+      if(isCursed){
+        document.body.classList.add('owl-flash');
+        setTimeout(() => document.body.classList.remove('owl-flash'), 500);
+      }
+
+      resultWheel.innerHTML = '';
+      const h2 = document.createElement('h2');
+      h2.textContent = 'Судьба сказала:';
+      if(isCursed) h2.classList.add('curse-title');
+      resultWheel.appendChild(h2);
+      const p = document.createElement('p');
+      if(isCursed || isHarsh) p.classList.add('curse-text');
+      resultWheel.appendChild(p);
+
+      if(isCursed){
+        typeWriter(p, fate.text, 26).then(() => {
+          isSpinning = false;
+          spinBtn.disabled = false;
+        });
+      } else {
+        p.textContent = fate.text;
+        isSpinning = false;
+        spinBtn.disabled = false;
+      }
+    }, 4600);
+  });
+
+  // ===================================================
+  // MODE 4: three-card spread (past / present / future)
+  // ===================================================
+  const spreadWrap = document.getElementById('spreadWrap');
+  const spreadBtn = document.getElementById('spreadBtn');
+
+  function drawThreeUnique(){
+    const pool = [...cards];
+    const picks = [];
+    for(let i = 0; i < 3 && pool.length; i++){
+      const idx = Math.floor(Math.random() * pool.length);
+      picks.push(pool.splice(idx, 1)[0]);
+    }
+    return picks;
+  }
+
+  spreadBtn.addEventListener('click', () => {
+    spreadBtn.disabled = true;
+    spreadWrap.innerHTML = '';
+    const labels = ['Прошлое', 'Настоящее', 'Будущее'];
+    const picks = drawThreeUnique();
+
+    picks.forEach((card, i) => {
+      const isCursed = card.severity === 'cursed' || card.id === 13;
+      const isHarsh = card.severity === 'harsh';
+
+      const slot = document.createElement('div');
+      slot.className = 'spread-slot';
+
+      const label = document.createElement('div');
+      label.className = 'slot-label';
+      label.textContent = labels[i];
+      slot.appendChild(label);
+
+      const cardEl = document.createElement('div');
+      cardEl.className = 'spread-card';
+      cardEl.style.opacity = '0';
+      cardEl.style.transition = 'opacity 0.5s ease';
+      slot.appendChild(cardEl);
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'spread-name';
+      nameEl.textContent = card.name;
+      slot.appendChild(nameEl);
+
+      const textEl = document.createElement('div');
+      textEl.className = 'spread-text';
+      if(isCursed || isHarsh) textEl.classList.add('curse-text');
+      textEl.textContent = card.text;
+      slot.appendChild(textEl);
+
+      spreadWrap.appendChild(slot);
+
+      setTimeout(() => {
+        renderCardVisual(cardEl, card);
+        cardEl.style.opacity = '1';
+        if(isCursed){
+          document.body.classList.add('owl-flash');
+          setTimeout(() => document.body.classList.remove('owl-flash'), 400);
+        }
+      }, 150 * (i + 1));
+    });
+
+    setTimeout(() => { spreadBtn.disabled = false; }, 900);
+  });
 </script>
 
 </body>
